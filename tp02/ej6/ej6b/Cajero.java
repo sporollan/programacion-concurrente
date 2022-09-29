@@ -2,12 +2,19 @@ package tp02.ej6.ej6b;
 
 public class Cajero extends Thread{
     private String nombre;
+    private Cliente cliente;
+    private long initialTime;
     public Cajero(String n){
         this.nombre = n;
     }
+    public Cajero(String n, Cliente c, long i){
+        this.nombre = n;
+        this.cliente = c;
+        this.initialTime = i;
+    }
 
-    public void run(Cliente cliente, long timeStamp){
-        this.procesarCompra(cliente, timeStamp);
+    public void run(){
+        this.procesarCompra(this.cliente, this.initialTime);
     }
 
     public void procesarCompra(Cliente cliente, long timeStamp) {
