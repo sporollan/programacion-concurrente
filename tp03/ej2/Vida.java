@@ -7,8 +7,13 @@ public class Vida {
         this.vida = 10;
     }
 
-    public void modificar(int v){
-        this.vida += v;
+    public synchronized boolean modificar(int v){
+        boolean f = false;
+        if(this.vida > 0){
+            this.vida += v;
+            f = true;
+        }
+        return f;
     }
 
     public int getVida(){

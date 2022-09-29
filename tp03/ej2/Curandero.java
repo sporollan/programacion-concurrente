@@ -1,17 +1,22 @@
 package tp03.ej2;
+import java.util.Random;
 
 public class Curandero extends Personaje{
+    private int v = 3;
 
-    public Curandero(Vida v){
-        super(v);
+    public Curandero(Vida vida){
+        super(vida);
     }
 
-    public void curar(int v){
+    public boolean accion(){
+        Random r = new Random();
+        try{
+            Thread.sleep((r.nextInt(1)+1)*1000);
+        } catch (InterruptedException e){};
         System.out.println("Curandero: Curar " + v + " puntos de vida");
-        super.modificar(v);
+        return super.modificar(v);
+
     }
 
-    public void run(){
-        this.curar(3);
-    }
+
 }

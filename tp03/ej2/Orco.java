@@ -1,18 +1,21 @@
 package tp03.ej2;
 
+import java.util.Random;
+
 public class Orco extends Personaje{
+    private int v = 5;
 
-    public Orco(Vida v){
-        super(v);   
+    public Orco(Vida vida){
+        super(vida);   
     }
 
-    public void atacar(int v){
+    public boolean accion(){
+        Random r = new Random();
+        try{
+            Thread.sleep((r.nextInt(4)+1)*1000);
+        } catch (InterruptedException e){};
         System.out.println("Orco: quitar " + v + " puntos de vida");
-        super.modificar(-v);
+        return super.modificar(-v);
 
-    }
-
-    public void run(){
-        this.atacar(3);
     }
 }
