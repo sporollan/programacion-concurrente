@@ -1,4 +1,4 @@
-package tp04.ej4;
+package tp03.ej7;
 
 public class Turno {
     private int turno = 0;
