@@ -13,7 +13,7 @@ public class Main {
             gato.start();
         }
         for (int i = 0; i<100; i++){
-            Thread perro = new Thread(new Animal("perro", gatoSem, perroSem, mutex, comedero), "perro"+i);
+            Thread perro = new Thread(new Animal("perro", perroSem, gatoSem, mutex, comedero), "perro"+i);
             perro.start();
 
         }

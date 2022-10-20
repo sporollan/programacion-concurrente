@@ -2,15 +2,15 @@ package tp5.ej2;
 import java.util.concurrent.*;
 
 public class Animal implements Runnable{
-    private Semaphore perroSem, gatoSem, mutex;
+    private Semaphore semOtro, semPropio, mutex;
     private String tipo;
     private Comedero comedero;
 
     
 
-    public Animal(String tipo, Semaphore gatoSem, Semaphore perroSem, Semaphore mutex, Comedero comedero){
-        this.perroSem = perroSem;
-        this.gatoSem = gatoSem;
+    public Animal(String tipo, Semaphore semPropio, Semaphore semOtro, Semaphore mutex, Comedero comedero){
+        this.semOtro = semOtro;
+        this.semPropio = semPropio;
         this.tipo = tipo;
         this.comedero = comedero;
         this.mutex = mutex;
@@ -20,42 +20,23 @@ public class Animal implements Runnable{
     public void run(){
         Boolean comio = false;
         while(!comio){
-            if(this.tipo == "gato"){
-                try{
-                    mutex.acquire();
-                } catch (InterruptedException e){}
-                if(perroSem.availablePermits() == this.comedero.getLimite() && this.comedero.puedeComer()){
-                    if(gatoSem.tryAcquire()){
-                        mutex.release();
-                        this.comedero.comer(gatoSem, perroSem);
-                        comio = true;
-                        gatoSem.release();
-                    } else {
-                        mutex.release();
-                    }
+            try{
+                mutex.acquire();
+            } catch (InterruptedException e){}
+            if(this.comedero.puedeComer(this.tipo)){
+                if(semPropio.tryAcquire()){
+                    this.comedero.increaseComiendo();
+                    mutex.release();
+                    this.comedero.comer(semPropio, semOtro);
+                    this.comedero.decreaseComiendo();
+                    comio = true;
+                    semPropio.release();
                 } else {
                     mutex.release();
                 }
-
-            } else if(this.tipo == "perro") {
-                try{
-                    mutex.acquire();
-                } catch (InterruptedException e){}
-                if(gatoSem.availablePermits() == this.comedero.getLimite() && this.comedero.puedeComer() ){
-            
-                    if(perroSem.tryAcquire()){
-                        mutex.release();
-                        this.comedero.comer(perroSem, gatoSem);
-                        comio = true;
-                        perroSem.release();
-                    } else {
-                        mutex.release();
-                    }
-                } else {
-                    mutex.release();
-                }
+            } else {
+                mutex.release();
             }
+        }
       }
-
     }
-}

@@ -4,10 +4,14 @@ import java.util.Random;
 
 public class Comedero {
     private int limite;
+    private int comiendo;
     private int comieron;
+    private String tipo;
     public Comedero(int limite){
         this.limite = limite;
         this.comieron = 0;
+        this.comiendo = 0;
+        this.tipo = "perro";
     }
 
     public void comer(Semaphore s, Semaphore s2){
@@ -23,12 +27,26 @@ public class Comedero {
         return this.limite;
     }
 
-    public boolean puedeComer(){
-        if(this.comieron == 10){
+    public boolean puedeComer(String animal){
+        boolean puede;
+        puede = (this.tipo == animal);
+        if(puede && this.comieron > 10){
+            if(animal == "perro")
+                this.tipo = "gato";
+            else
+                this.tipo = "perro";
             this.comieron = 0;
-            return false;
-        } else {
-            return true;
+            puede = false;
         }
+        return puede;
     }
+
+    public void increaseComiendo(){
+        this.comiendo++;
+    }
+
+    public void decreaseComiendo(){
+        this.comiendo--;
+    }
+
 }
