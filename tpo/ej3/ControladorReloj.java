@@ -7,6 +7,7 @@ public class ControladorReloj implements Runnable{
     }
     public void run(){
         while(true){
+            // incrementa el reloj cada un segundo
             try{
                 Thread.sleep(1000);
             } catch (InterruptedException e){}
