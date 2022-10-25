@@ -26,32 +26,30 @@ public class Auto implements Runnable{
         this.buque.rmAuto();
     }
 
-    public synchronized void n(){
-        this.notify();
-    }
-
-    public synchronized void w(){
-        try{
-            this.wait();
-        } catch (InterruptedException e){}
-    }
-
     public void run(){
         try{
+            // semEmbarcar para esperar al barco
             semEmbarcar.acquire();
         } catch (InterruptedException e){}
+        // le avisa al barco y espera a que levante la barrera
+        this.buque.notifyControl();
+        this.buque.waitBarrera();
         this.embarcar();
 
-        if(!buque.isFull()){
-            semEmbarcar.release();
-        } else {
-            this.buque.notifyControl();
-        }
+        if(!this.buque.isFull())
+            // le avisa al auto proximo que puede subir
+            this.buque.notifyBarrera();
 
+        // le avisa al buque que subio
+        this.buque.notifyControl();
+
+        // espera a que levanten la barrera para desembarcar
         this.buque.waitBarrera();
         this.desembarcar();
-        this.buque.notifyBarrera();
-
+        if(!this.buque.isEmpty())
+            // avisa al auto proximo que puede bajar
+            this.buque.notifyBarrera();
+        // avisa al buque que bajo
         this.buque.notifyControl();
 
     }

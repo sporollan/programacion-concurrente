@@ -2,12 +2,12 @@ package tpo.ej1;
 
 public class Buque {
     private int numAutos;
-    private Mon barreraMon;
-    private Mon2 controlMon;
+    private Mon barreraMon, controlMon;
+    //private Mon2 controlMon;
     public Buque(){
         this.numAutos = 0;
         this.barreraMon = new Mon();
-        this.controlMon = new Mon2();
+        this.controlMon = new Mon();
     }
 
     public synchronized void w(){
