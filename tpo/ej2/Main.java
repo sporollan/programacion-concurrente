@@ -3,10 +3,11 @@ import java.util.concurrent.*;
 
 public class Main {
     public static void main(String[] args){
-        Recipiente recipiente = new Recipiente();
         Semaphore semHidrogeno = new Semaphore(0);
         Semaphore semOxigeno = new Semaphore(0);
-        Thread generador = new Thread(new Generador(recipiente, semHidrogeno, semOxigeno));
+        Recipiente recipiente = new Recipiente(semOxigeno, semHidrogeno);
+
+        Thread generador = new Thread(new Generador(recipiente));
         generador.start();
         for(int i = 0; i < 40; i++){
             Thread hidrogeno = new Thread(new Hidrogeno(recipiente, semHidrogeno));

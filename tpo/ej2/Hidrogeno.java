@@ -4,21 +4,28 @@ import java.util.Random;
 
 public class Hidrogeno implements Runnable{
     private Recipiente recipiente;
-    private Semaphore semHidrogeno;
+    private Semaphore hlisto;
 
-    public Hidrogeno(Recipiente recipiente, Semaphore semHidrogeno){
+    public Hidrogeno(Recipiente recipiente, Semaphore hlisto){
         this.recipiente = recipiente;
-        this.semHidrogeno = semHidrogeno;
+        this.hlisto = hlisto;
     }
     public void run(){
         Random r = new Random();
         try{
-            Thread.sleep(r.nextInt(100)*2000);
+            // simula que flota por un tiempo
+            Thread.sleep(r.nextInt(100)*1000);
         } catch (InterruptedException e){}
         finally{};
 
+        // ingresa en el recipiente y notifica al generador
         recipiente.addHlisto();
-        semHidrogeno.release();
+        this.recipiente.notifyGenerador();
+        try{
+            // espera hasta hasta que se complete el proceso hacer agua
+            this.hlisto.acquire();
+        } catch (InterruptedException e){}
+        System.out.println("Hidrogeno consumido");
         
     }
 }

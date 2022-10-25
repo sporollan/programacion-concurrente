@@ -1,26 +1,25 @@
 package tpo.ej2;
-import java.util.concurrent.*;
 
 public class Generador implements Runnable{
-    private Semaphore semOxigeno, semHidrogeno;
     private Recipiente recipiente;
 
-    public Generador(Recipiente recipiente, Semaphore semHidrogeno, Semaphore semOxigeno){
+    public Generador(Recipiente recipiente){
         this.recipiente = recipiente;
-        this.semHidrogeno = semHidrogeno;
-        this.semOxigeno = semOxigeno;
     }
     public void run(){
         while(true){
-            try{
-                this.semHidrogeno.acquire(2);
-                this.semOxigeno.acquire(1);
-            } catch (InterruptedException e){}
+            while(!this.recipiente.listo()){
+                // el recipiente espera 2 hlisto y 1 olisto minimo
+                this.recipiente.waitGenerador();
+            }
+            // luego genera agua
             System.out.println("generando agua");
             this.recipiente.hacerAgua();
             try{
                 Thread.sleep(1000);
             } catch (InterruptedException e){}
+
+            // finalmente muestra el contenido y comprueba si debe vaciarse
             this.recipiente.show();
             this.recipiente.comprobarLleno();
         }
