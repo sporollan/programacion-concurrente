@@ -1,9 +1,13 @@
 package tpo.ej1;
 
 public class Buque {
-    int numAutos;
+    private int numAutos;
+    private Mon barreraMon;
+    private Mon2 controlMon;
     public Buque(){
-        numAutos = 0;
+        this.numAutos = 0;
+        this.barreraMon = new Mon();
+        this.controlMon = new Mon2();
     }
 
     public synchronized void w(){
@@ -25,16 +29,35 @@ public class Buque {
         this.numAutos--;
     }
 
+    public void waitControl(){
+        this.controlMon.w();
+    }
+
+    public void notifyControl(){
+        this.controlMon.n();
+    }
+
+    public void waitBarrera(){
+        this.barreraMon.w();
+    }
+
+    public void notifyBarrera(){
+        this.barreraMon.n();
+    }
+
     public void ir(){
         System.out.println("Realizando viaje de ida con " + this.numAutos);
     }
     public void volver(){
-        this.numAutos = 0;
         System.out.println("Realizando viaje de vuelta con " + this.numAutos);
 
     }
 
     public boolean isFull(){
         return this.numAutos == 10;
+    }
+
+    public boolean isEmpty(){
+        return this.numAutos == 0;
     }
 }

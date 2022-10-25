@@ -30,6 +30,12 @@ public class Auto implements Runnable{
         this.notify();
     }
 
+    public synchronized void w(){
+        try{
+            this.wait();
+        } catch (InterruptedException e){}
+    }
+
     public void run(){
         try{
             semEmbarcar.acquire();
@@ -39,8 +45,14 @@ public class Auto implements Runnable{
         if(!buque.isFull()){
             semEmbarcar.release();
         } else {
-            this.buque.n();
+            this.buque.notifyControl();
         }
+
+        this.buque.waitBarrera();
+        this.desembarcar();
+        this.buque.notifyBarrera();
+
+        this.buque.notifyControl();
 
     }
 }
