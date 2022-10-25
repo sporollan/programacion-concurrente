@@ -15,7 +15,7 @@ public class Reloj {
     }
 
     public void initHoraAlarmaRandom(){
-        // funcion que permite asignar un numero aleatorio al valor alarma
+        // permite asignar un numero aleatorio al valor alarma
         Random r = new Random();
         this.horaAlarma = r.nextInt(this.tiempoMax-2) + 1;
         System.out.println("Hora alarma: " + this.horaAlarma);
@@ -33,7 +33,8 @@ public class Reloj {
     }
 
     public void despertar(){
-        // utiliza el monitor despertador para despertar 1 trabajador
+        /*  utiliza el monitor despertador para despertar 1 trabajador
+            se cuentan los despertados para utilizar en la funcion faltaDespertar*/
         this.despertador.n();
         this.despertados++;
     }
@@ -43,6 +44,7 @@ public class Reloj {
     }
 
     public boolean faltaDespertar(){
+        // comprueba si ya se desperto una vez a cada trabajador
         return(this.despertados != this.numTrabajador);
     }
 
